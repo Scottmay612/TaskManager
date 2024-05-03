@@ -17,4 +17,8 @@ open class Task(
         println("Description: $description")
         println("Due Date: $dueDate")
     }
+
+    open fun taskToString(): String {
+        return "$name|$description|$dueDate"
+    }
 }

@@ -2,8 +2,8 @@ class WorkTask(
     name: String = "",
     description: String = "",
     dueDate: String = "",
-    var priority: String = "",
-    var peopleInvolved: MutableList<String> = mutableListOf()
+    private var priority: String = "",
+    private var peopleInvolved: MutableList<String> = mutableListOf()
 ): Task(name, description, dueDate) {
     override fun setValues() {
         super.setValues()

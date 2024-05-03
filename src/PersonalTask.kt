@@ -9,4 +9,9 @@ class PersonalTask(
         print("What is the priority? (Out of ten): ")
         priority = readln().toInt()
     }
+
+    override fun displayTask() {
+        super.displayTask()
+        println("Priority Level: $priority")
+    }
 }
