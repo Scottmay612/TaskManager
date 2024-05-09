@@ -3,9 +3,6 @@
 import java.io.File
 
 
-// Finish write to file function at the bottom.
-
-
 fun main() {
     // Declare important variables to be used later.
     val fileName = "tasks.txt"
@@ -13,19 +10,18 @@ fun main() {
     val taskLines = loadTasksFromFile(fileName)
     val loadedWorkTasks = workStringToObject(taskLines)
 
-    val personalTasks: MutableList<Task> = mutableListOf()
+    val personalTasks: MutableList<Task> = personalStringToObject(taskLines)
     val workTasks: MutableList<Task> = loadedWorkTasks
-    val churchTasks: MutableList<Task> = mutableListOf()
-    val miscellaneousTasks: MutableList<Task> = mutableListOf()
-    val allTasks: MutableList<Task> = mutableListOf()
+    val churchTasks: MutableList<Task> = churchStringToObject(taskLines)
+    val miscellaneousTasks: MutableList<Task> = miscStringToObject(taskLines)
 
 
     val menuOptions = listOf(
         "Create New Task",
         "View Existing Tasks",
-        "Mark Task Completed",
+        "Delete Task",
         "Save Tasks",
-        "Load Tasks")
+        )
     val taskTypes = listOf(
         "Work",
         "Personal",
@@ -69,10 +65,10 @@ fun main() {
                     for (i in taskTypes.indices) {
                         println("${i+1}. ${taskTypes[i]}")
                     }
-                    println("$taskTypesQuitOption. Quit")
+                    println("$taskTypesQuitOption. Return to Main Menu")
 
                     // Update task type choice.
-                    print("Please select a number: ")
+                    print("Pick a number: ")
                     taskTypeChoice = readln()
 
                     // Alternate paths for different task choice.
@@ -89,7 +85,6 @@ fun main() {
                             // Add the task to the list of work tasks.
                             // Add the task to the list of all tasks.
                             workTasks.add(workTask1)
-                            allTasks.add(workTask1)
                         }
                         // Personal task.
                         "2" -> {
@@ -102,7 +97,6 @@ fun main() {
                             // Add the task to the list of personal tasks.
                             // Add the task to the list of all tasks.
                             personalTasks.add(personalTask)
-                            allTasks.add(personalTask)
                         }
                         // Church task.
                         "3" -> {
@@ -115,7 +109,6 @@ fun main() {
                             // Add the task to the list of church tasks.
                             // Add the task to the list of all tasks.
                             churchTasks.add(churchTask)
-                            allTasks.add(churchTask)
                         }
                         // Miscellaneous task.
                         "4" -> {
@@ -128,7 +121,6 @@ fun main() {
                             // Add the task to the list of miscellaneous tasks.
                             // Add the task to the list of all tasks.
                             miscellaneousTasks.add(miscellaneousTask)
-                            allTasks.add(miscellaneousTask)
                         }
                     }
                 }
@@ -140,21 +132,22 @@ fun main() {
 
                 while (viewTaskChoice != taskTypesQuitOption) {
                     // Display options menu.
-                    println("Options:")
+                    println("Which type of task would you like to view?")
                     for (i in taskTypes.indices) {
                         println("${i+1}. ${taskTypes[i]}")
                     }
-                    println("$taskTypesQuitOption. Quit")
+                    println("$taskTypesQuitOption. Return to Main Menu")
 
                     // Update task choice.
                     print("Select a number: ")
                     viewTaskChoice = readln()
 
+                    println()
+
                     when (viewTaskChoice) {
 
                         // Display work tasks.
                         "1" -> {
-                            println()
                             println("Here are your work tasks:")
                             for (task in workTasks) {
                                 task.displayTask()
@@ -165,7 +158,6 @@ fun main() {
                         }
                         // Display personal tasks.
                         "2" -> {
-                            println()
                             println("Here are your personal tasks:")
                             for (task in personalTasks) {
                                 task.displayTask()
@@ -177,7 +169,6 @@ fun main() {
 
                         // Display church tasks.
                         "3" -> {
-                            println()
                             println("Here are your church tasks:")
                             for (task in churchTasks) {
                                 task.displayTask()
@@ -188,7 +179,6 @@ fun main() {
                         }
                         // Display miscellaneous tasks.
                         "4" -> {
-                            println()
                             println("Here are your miscellaneous tasks:")
                             for (task in miscellaneousTasks) {
                                 task.displayTask()
@@ -200,41 +190,120 @@ fun main() {
                     }
                 }
             }
-            "4" -> { // Assuming this input triggers a specific action
-                // Create a list to hold task strings for each category
+            // Mark task as done.
+            "3" -> {
+                var deleteTaskChoice = ""
+
+                while (deleteTaskChoice != taskTypesQuitOption) {
+                    println("Which type of task would you like to delete?")
+                    for (i in taskTypes.indices) {
+                        println("${i+1}. ${taskTypes[i]}")
+                    }
+                    println("$taskTypesQuitOption. Return to Main Menu")
+                    print("Pick a number: ")
+                    deleteTaskChoice = readln()
+
+                    println()
+
+                    when (deleteTaskChoice) {
+                        // Display work tasks.
+                        "1" -> {
+                            println("Which one would you like to delete? ")
+                            for (i in workTasks.indices) {
+                                println("${i+1}. ${workTasks[i].name}")
+                            }
+                            print("Pick a number: ")
+                            val specificTaskDelete = readln().toInt()
+
+                            workTasks.removeAt(specificTaskDelete - 1)
+                            println()
+
+                        }
+                        // Display personal tasks.
+                        "2" -> {
+                            println()
+                            println("Which one would you like to delete? ")
+                            for (i in personalTasks.indices) {
+                                println("${i+1}. ${personalTasks[i].name}")
+                            }
+                            print("Pick a number: ")
+                            val specificTaskDelete = readln().toInt()
+
+                            personalTasks.removeAt(specificTaskDelete - 1)
+                            println()
+                        }
+
+                        // Display church tasks.
+                        "3" -> {
+                            println()
+                            println("Which one would you like to delete? ")
+                            for (i in personalTasks.indices) {
+                                println("${i+1}. ${personalTasks[i].name}")
+                            }
+                            print("Pick a number: ")
+                            val specificTaskDelete = readln().toInt()
+
+                            personalTasks.removeAt(specificTaskDelete - 1)
+                            println()
+                        }
+                        // Display miscellaneous tasks.
+                        "4" -> {
+                            println()
+                            println("Which one would you like to delete? ")
+                            for (i in miscellaneousTasks.indices) {
+                                println("${i+1}. ${miscellaneousTasks[i].name}")
+                            }
+                            print("Pick a number: ")
+                            val specificTaskDelete = readln().toInt()
+
+                            miscellaneousTasks.removeAt(specificTaskDelete - 1)
+                            println()
+                        }
+                    }
+                    if (deleteTaskChoice != "5") {
+                        println("Task Deleted!")
+                        Thread.sleep(2000)
+                    }
+                }
+            }
+            // Save the tasks.
+            "4" -> {
+                // Create a list to hold task strings for each category.
                 val taskStringList: MutableList<String> = mutableListOf()
 
-                // Generate strings of tasks from each task list
+                // Generate strings of tasks from each task list.
                 val workString = makeStringOfTasks(workTasks)
                 val personalString = makeStringOfTasks(personalTasks)
                 val churchString = makeStringOfTasks(churchTasks)
                 val miscellaneousString = makeStringOfTasks(miscellaneousTasks)
 
-                // Add the generated task strings to the list
+                // Add the generated task strings to the list.
                 taskStringList.add(workString)
                 taskStringList.add(personalString)
                 taskStringList.add(churchString)
                 taskStringList.add(miscellaneousString)
 
-                // Write the combined task list to a file
+                // Write the combined task list to a file.
                 writeToFile(fileName, taskStringList)
+                println("Tasks Saved!")
+                Thread.sleep(3000)
             }
-            "5" -> {
-                loadTasksFromFile(fileName)
-            }
+
         }
+        // Add new line to the end for organization.
+        println()
     }
 }
 
 fun writeToFile(fileName: String, taskList: List<String>) {
-    // Create a PrintWriter to write to the specified file
+    // Create a PrintWriter to write to the specified file.
     File(fileName).printWriter().use { out ->
-        // Iterate over each task in the list
+        // Iterate over each task in the list.
         taskList.forEach { value ->
-            // Write the current task to the file, followed by a newline
+            // Write the current task to the file, followed by a newline.
             out.println(value)
         }
-    } // 'use' ensures the PrintWriter is automatically closed
+    } // 'use' ensures the PrintWriter is automatically closed.
 }
 
 
@@ -258,6 +327,82 @@ fun loadTasksFromFile(fileName: String): List<String> {
     return lines
 }
 
+fun miscStringToObject(taskLines: List<String>): MutableList<Task> {
+    val miscTaskLines = taskLines[3]
+    val miscTasks: MutableList<Task> = mutableListOf()
+    val miscLineList = miscTaskLines.split("|")
+    val taskAmount = miscLineList.size / 3
+    var nameIndex = 0
+    var descriptionIndex = 1
+    var dueDateIndex = 2
+
+    for (i in 0..< taskAmount) {
+        val miscTask = Task(
+            miscLineList[nameIndex],
+            miscLineList[descriptionIndex],
+            miscLineList[dueDateIndex])
+
+        nameIndex += 3
+        descriptionIndex += 3
+        dueDateIndex += 3
+
+        miscTasks.add(miscTask)
+    }
+    return miscTasks
+}
+fun personalStringToObject(taskLines: List<String>): MutableList<Task> {
+    val personalTaskLines = taskLines[1]
+    val personalTasks: MutableList<Task> = mutableListOf()
+    val personalLineList = personalTaskLines.split("|")
+    val taskAmount = personalLineList.size / 4
+    var nameIndex = 0
+    var descriptionIndex = 1
+    var dueDateIndex = 2
+    var priorityIndex = 3
+
+    for (i in 0..< taskAmount) {
+        val personalTask = PersonalTask(
+            personalLineList[nameIndex],
+            personalLineList[descriptionIndex],
+            personalLineList[dueDateIndex],
+            personalLineList[priorityIndex])
+
+        nameIndex += 4
+        descriptionIndex += 4
+        dueDateIndex += 4
+        priorityIndex += 4
+
+        personalTasks.add(personalTask)
+    }
+    return personalTasks
+}
+
+fun churchStringToObject(taskLines: List<String>): MutableList<Task> {
+    val churchTaskLines = taskLines[2]
+    val churchTasks: MutableList<Task> = mutableListOf()
+    val churchLineList = churchTaskLines.split("|")
+    val taskAmount = churchLineList.size / 4
+    var nameIndex = 0
+    var descriptionIndex = 1
+    var dueDateIndex = 2
+    var priorityIndex = 3
+
+    for (i in 0..< taskAmount) {
+        val churchTask = ChurchTask(
+            churchLineList[nameIndex],
+            churchLineList[descriptionIndex],
+            churchLineList[dueDateIndex],
+            churchLineList[priorityIndex])
+
+        nameIndex += 4
+        descriptionIndex += 4
+        dueDateIndex += 4
+        priorityIndex += 4
+
+        churchTasks.add(churchTask)
+    }
+    return churchTasks
+}
 fun workStringToObject(taskLines: List<String>): MutableList<Task> {
     val workTaskLines = taskLines[0]
     val workTasks: MutableList<Task> = mutableListOf()
@@ -273,9 +418,6 @@ fun workStringToObject(taskLines: List<String>): MutableList<Task> {
     val peopleList: MutableList<String> = mutableListOf()
     for (item in firstList) {
         peopleList.add(item)
-    }
-    for (person in peopleList) {
-        println(person)
     }
     for (i in 0..< taskAmount) {
         val workTask = WorkTask(

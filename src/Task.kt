@@ -1,6 +1,6 @@
 
 open class Task(
-    protected var name: String = "",
+    var name: String = "",
     protected var description: String = "",
     protected var dueDate: String = ""
 ) {
