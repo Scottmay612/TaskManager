@@ -1,10 +1,12 @@
 
 open class Task(
-    private var name: String = "",
-    private var description: String = "",
-    private var dueDate: String = ""
+    protected var name: String = "",
+    protected var description: String = "",
+    protected var dueDate: String = ""
 ) {
     open fun setValues() {
+        // Prompts the user to enter the values for the task.
+
         print("What is the task name? ")
         name = readln()
         print("What is the task description? ")
@@ -13,12 +15,16 @@ open class Task(
         dueDate = readln()
     }
     open fun displayTask() {
+        // Displays the tasks in readable format.
+
         println("Name: $name")
         println("Description: $description")
         println("Due Date: $dueDate")
     }
 
     open fun taskToString(): String {
-        return "$name|$description|$dueDate"
+        // Returns the task object as a string.
+
+        return "$name|$description|$dueDate|"
     }
 }

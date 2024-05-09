@@ -30,4 +30,13 @@ class WorkTask(
             println("${i+1}. ${peopleInvolved[i]}")
         }
     }
+
+    override fun taskToString(): String {
+//        val peopleString = ""
+//        for (people in peopleInvolved) {
+//            peopleString += "people"
+//        }
+        return "$name|$description|$dueDate|$priority|$peopleInvolved|"
+
+    }
 }

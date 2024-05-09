@@ -14,4 +14,8 @@ class PersonalTask(
         super.displayTask()
         println("Priority Level: $priority")
     }
+
+    override fun taskToString(): String {
+        return "$name|$description|$dueDate|$priority|"
+    }
 }

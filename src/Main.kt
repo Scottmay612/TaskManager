@@ -9,13 +9,28 @@ import java.io.File
 fun main() {
     // Declare important variables to be used later.
     val fileName = "tasks.txt"
+
+    val taskLines = loadTasksFromFile(fileName)
+    val loadedWorkTasks = workStringToObject(taskLines)
+
     val personalTasks: MutableList<Task> = mutableListOf()
-    val workTasks: MutableList<Task> = mutableListOf()
+    val workTasks: MutableList<Task> = loadedWorkTasks
     val churchTasks: MutableList<Task> = mutableListOf()
     val miscellaneousTasks: MutableList<Task> = mutableListOf()
     val allTasks: MutableList<Task> = mutableListOf()
-    val menuOptions = listOf("Create New Task", "View Existing Tasks", "Mark Task Completed", "Save Tasks")
-    val taskTypes = listOf("Work", "Personal", "Church", "Miscellaneous")
+
+
+    val menuOptions = listOf(
+        "Create New Task",
+        "View Existing Tasks",
+        "Mark Task Completed",
+        "Save Tasks",
+        "Load Tasks")
+    val taskTypes = listOf(
+        "Work",
+        "Personal",
+        "Church",
+        "Miscellaneous")
     val taskTypesQuitOption = (taskTypes.size + 1).toString()
     val mainMenuQuitOption = (menuOptions.size + 1).toString()
 
@@ -114,7 +129,6 @@ fun main() {
                             // Add the task to the list of all tasks.
                             miscellaneousTasks.add(miscellaneousTask)
                             allTasks.add(miscellaneousTask)
-
                         }
                     }
                 }
@@ -124,86 +138,164 @@ fun main() {
                 // Declare the task choice variable for the while loop.
                 var viewTaskChoice = ""
 
-                while (viewTaskChoice != "3") {
+                while (viewTaskChoice != taskTypesQuitOption) {
                     // Display options menu.
                     println("Options:")
-                    println("1. View All Tasks")
-                    println("2. View Specific Type of Task")
-                    println("3. Quit")
+                    for (i in taskTypes.indices) {
+                        println("${i+1}. ${taskTypes[i]}")
+                    }
+                    println("$taskTypesQuitOption. Quit")
 
                     // Update task choice.
                     print("Select a number: ")
                     viewTaskChoice = readln()
 
-                    // Alternate paths for which task viewing option they pick.
                     when (viewTaskChoice) {
 
-                        // View all tasks.
+                        // Display work tasks.
                         "1" -> {
-                            for (task in allTasks) {
+                            println()
+                            println("Here are your work tasks:")
+                            for (task in workTasks) {
                                 task.displayTask()
+                                println()
                             }
-                            print("Press enter to continue: ")
+                            print("Press enter to continue:")
                             readln()
                         }
-                        // View specific type of task.
+                        // Display personal tasks.
                         "2" -> {
-                            // Declare the specific task choice for the while loop.
-                            var specificTaskChoice = ""
-
-                            // Run the while loop until they choose the quit option.
-                            while (specificTaskChoice != "5") {
-
-                                // Display the tasks types as viewing options.
-                                println("Which task type would you like to view? ")
-                                for (i in menuOptions.indices) {
-                                    println("${i+1}. ${menuOptions[i]}")
-                                }
-
-                                // Update the specific task choice with the user's input.
-                                specificTaskChoice = readln()
-
-                                // Alternate paths depending on the user's viewing choice.
-                                when (specificTaskChoice) {
-
-                                    // Display work tasks.
-                                    "1" -> {
-                                        for (task in workTasks) {
-                                            task.displayTask()
-                                        }
-                                    }
-                                    // Display personal tasks.
-                                    "2" -> {
-                                        for (task in personalTasks) {
-                                            task.displayTask()
-                                        }
-                                    }
-                                    // Display church tasks.
-                                    "3" -> {
-                                        for (task in churchTasks) {
-                                            task.displayTask()
-                                        }
-                                    }
-                                    // Display miscellaneous tasks.
-                                    "4" -> {
-                                        for (task in miscellaneousTasks) {
-                                            task.displayTask()
-                                        }
-                                    }
-                                }
+                            println()
+                            println("Here are your personal tasks:")
+                            for (task in personalTasks) {
+                                task.displayTask()
+                                println()
                             }
+                            print("Press enter to continue:")
+                            readln()
+                        }
+
+                        // Display church tasks.
+                        "3" -> {
+                            println()
+                            println("Here are your church tasks:")
+                            for (task in churchTasks) {
+                                task.displayTask()
+                                println()
+                            }
+                            print("Press enter to continue:")
+                            readln()
+                        }
+                        // Display miscellaneous tasks.
+                        "4" -> {
+                            println()
+                            println("Here are your miscellaneous tasks:")
+                            for (task in miscellaneousTasks) {
+                                task.displayTask()
+                                println()
+                            }
+                            print("Press enter to continue:")
+                            readln()
                         }
                     }
                 }
             }
-            "4" -> {
-                writeToFile(fileName, "Hello")
+            "4" -> { // Assuming this input triggers a specific action
+                // Create a list to hold task strings for each category
+                val taskStringList: MutableList<String> = mutableListOf()
+
+                // Generate strings of tasks from each task list
+                val workString = makeStringOfTasks(workTasks)
+                val personalString = makeStringOfTasks(personalTasks)
+                val churchString = makeStringOfTasks(churchTasks)
+                val miscellaneousString = makeStringOfTasks(miscellaneousTasks)
+
+                // Add the generated task strings to the list
+                taskStringList.add(workString)
+                taskStringList.add(personalString)
+                taskStringList.add(churchString)
+                taskStringList.add(miscellaneousString)
+
+                // Write the combined task list to a file
+                writeToFile(fileName, taskStringList)
+            }
+            "5" -> {
+                loadTasksFromFile(fileName)
             }
         }
     }
 }
 
-fun writeToFile(fileName: String, content: String) {
-    File(fileName).writeText(content)
+fun writeToFile(fileName: String, taskList: List<String>) {
+    // Create a PrintWriter to write to the specified file
+    File(fileName).printWriter().use { out ->
+        // Iterate over each task in the list
+        taskList.forEach { value ->
+            // Write the current task to the file, followed by a newline
+            out.println(value)
+        }
+    } // 'use' ensures the PrintWriter is automatically closed
 }
+
+
+fun makeStringOfTasks(taskList: List<Task>): String {
+    // Initialize an empty string to store the concatenated task descriptions
+    var objectString = ""
+
+    // Iterate through each task in the taskList
+    for (task in taskList) {
+        // Append the result of calling task.taskToString() to the objectString
+        objectString += task.taskToString()
+    }
+
+    // Return the combined string representation of all tasks
+    return objectString
+}
+
+fun loadTasksFromFile(fileName: String): List<String> {
+    val file = File(fileName)
+    val lines = file.readLines()
+    return lines
+}
+
+fun workStringToObject(taskLines: List<String>): MutableList<Task> {
+    val workTaskLines = taskLines[0]
+    val workTasks: MutableList<Task> = mutableListOf()
+    val taskLineList = workTaskLines.split("|")
+    val taskAmount = taskLineList.size / 5
+    var nameIndex = 0
+    var descriptionIndex = 1
+    var dueDateIndex = 2
+    var priorityIndex = 3
+    var peopleInvolvedIndex = 4
+    val peopleString = taskLineList[peopleInvolvedIndex]
+    val firstList: List<String> = peopleString.substring(1, peopleString.length - 1).split(",")
+    val peopleList: MutableList<String> = mutableListOf()
+    for (item in firstList) {
+        peopleList.add(item)
+    }
+    for (person in peopleList) {
+        println(person)
+    }
+    for (i in 0..< taskAmount) {
+        val workTask = WorkTask(
+            taskLineList[nameIndex],
+            taskLineList[descriptionIndex],
+            taskLineList[dueDateIndex],
+            taskLineList[priorityIndex],
+            peopleList
+        )
+        nameIndex += 5
+        descriptionIndex += 5
+        dueDateIndex += 5
+        priorityIndex += 5
+        peopleInvolvedIndex += 5
+
+        workTasks.add(workTask)
+    }
+    return workTasks
+}
+
+
+
 
