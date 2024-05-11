@@ -14,8 +14,7 @@ I like to make programs that are useful and solve a real world problem. This pro
 
 Development Environment: IntelliJ IDEA
 
-Language: Kotlin
-imports: import java.io.File
+Language: Kotlin, Imports: import java.io.File
 
 # Useful Websites
 
