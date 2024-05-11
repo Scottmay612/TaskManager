@@ -8,14 +8,12 @@ fun main() {
     val fileName = "tasks.txt"
 
     val taskLines = loadTasksFromFile(fileName)
-    val loadedWorkTasks = workStringToObject(taskLines)
-
     val personalTasks: MutableList<Task> = personalStringToObject(taskLines)
-    val workTasks: MutableList<Task> = loadedWorkTasks
+    val workTasks: MutableList<Task> = workStringToObject(taskLines)
     val churchTasks: MutableList<Task> = churchStringToObject(taskLines)
     val miscellaneousTasks: MutableList<Task> = miscStringToObject(taskLines)
 
-
+    // Menus that are commonly used.
     val menuOptions = listOf(
         "Create New Task",
         "View Existing Tasks",
@@ -27,6 +25,8 @@ fun main() {
         "Personal",
         "Church",
         "Miscellaneous")
+
+    // Quit index for the commonly used menus.
     val taskTypesQuitOption = (taskTypes.size + 1).toString()
     val mainMenuQuitOption = (menuOptions.size + 1).toString()
 
@@ -190,7 +190,7 @@ fun main() {
                     }
                 }
             }
-            // Mark task as done.
+            // Delete task from the list.
             "3" -> {
                 var deleteTaskChoice = ""
 
@@ -322,119 +322,210 @@ fun makeStringOfTasks(taskList: List<Task>): String {
 }
 
 fun loadTasksFromFile(fileName: String): List<String> {
+    // Get the file lines from the task file and return them as a list of strings.
     val file = File(fileName)
     val lines = file.readLines()
     return lines
 }
 
 fun miscStringToObject(taskLines: List<String>): MutableList<Task> {
-    val miscTaskLines = taskLines[3]
+    // Deserialize the miscellaneous task strings into objects.
+
     val miscTasks: MutableList<Task> = mutableListOf()
-    val miscLineList = miscTaskLines.split("|")
-    val taskAmount = miscLineList.size / 3
-    var nameIndex = 0
-    var descriptionIndex = 1
-    var dueDateIndex = 2
+    try {
+        // Get string of tasks.
+        val miscTaskLines = taskLines[3]
 
-    for (i in 0..< taskAmount) {
-        val miscTask = Task(
-            miscLineList[nameIndex],
-            miscLineList[descriptionIndex],
-            miscLineList[dueDateIndex])
+        // Split the list at vertical bars to split into correct parts.
+        val miscLineList = miscTaskLines.split("|")
 
-        nameIndex += 3
-        descriptionIndex += 3
-        dueDateIndex += 3
+        // Divide the total parts by the amount in the task.
+        val taskAmount = miscLineList.size / 3
 
-        miscTasks.add(miscTask)
+        // Declare the indexes/order for each part of the task.
+        var nameIndex = 0
+        var descriptionIndex = 1
+        var dueDateIndex = 2
+
+        // Create a new task object and assign it's correlating parts.
+        for (i in 0..< taskAmount) {
+            val miscTask = Task(
+                miscLineList[nameIndex],
+                miscLineList[descriptionIndex],
+                miscLineList[dueDateIndex])
+
+            // Increase each index by the amount of parts there are in object.
+            // This is for the next loop.
+            nameIndex += 3
+            descriptionIndex += 3
+            dueDateIndex += 3
+
+            // Add the task the list of task objects.
+            miscTasks.add(miscTask)
+        }
+
+    } catch (e: Exception) {
+        return miscTasks
     }
+
+
+    // Return the list of task objects.
     return miscTasks
 }
 fun personalStringToObject(taskLines: List<String>): MutableList<Task> {
-    val personalTaskLines = taskLines[1]
+    // Deserialize the personal task strings into objects.
+
     val personalTasks: MutableList<Task> = mutableListOf()
-    val personalLineList = personalTaskLines.split("|")
-    val taskAmount = personalLineList.size / 4
-    var nameIndex = 0
-    var descriptionIndex = 1
-    var dueDateIndex = 2
-    var priorityIndex = 3
+    try {
+        // Get string of tasks.
+        val personalTaskLines = taskLines[1]
 
-    for (i in 0..< taskAmount) {
-        val personalTask = PersonalTask(
-            personalLineList[nameIndex],
-            personalLineList[descriptionIndex],
-            personalLineList[dueDateIndex],
-            personalLineList[priorityIndex])
+        // Split the list at vertical bars to split into correct parts.
+        val personalLineList = personalTaskLines.split("|")
 
-        nameIndex += 4
-        descriptionIndex += 4
-        dueDateIndex += 4
-        priorityIndex += 4
+        // Divide the total parts by the amount in the task.
+        val taskAmount = personalLineList.size / 4
 
-        personalTasks.add(personalTask)
+        // Declare the indexes/order for each part of the task.
+        var nameIndex = 0
+        var descriptionIndex = 1
+        var dueDateIndex = 2
+        var priorityIndex = 3
+
+        // Create a new task object and assign it's correlating parts.
+        for (i in 0..< taskAmount) {
+            val personalTask = PersonalTask(
+                personalLineList[nameIndex],
+                personalLineList[descriptionIndex],
+                personalLineList[dueDateIndex],
+                personalLineList[priorityIndex])
+
+            // Increase each index by the amount of parts there are in object.
+            // This is for the next loop.
+            nameIndex += 4
+            descriptionIndex += 4
+            dueDateIndex += 4
+            priorityIndex += 4
+
+            // Add the task the list of task objects.
+            personalTasks.add(personalTask)
+        }
+
+    } catch (e: Exception) {
+        return personalTasks
     }
+
+
+    // Return the list of task objects.
     return personalTasks
 }
 
 fun churchStringToObject(taskLines: List<String>): MutableList<Task> {
-    val churchTaskLines = taskLines[2]
+    // Deserialize the church task strings into objects.
+
     val churchTasks: MutableList<Task> = mutableListOf()
-    val churchLineList = churchTaskLines.split("|")
-    val taskAmount = churchLineList.size / 4
-    var nameIndex = 0
-    var descriptionIndex = 1
-    var dueDateIndex = 2
-    var priorityIndex = 3
 
-    for (i in 0..< taskAmount) {
-        val churchTask = ChurchTask(
-            churchLineList[nameIndex],
-            churchLineList[descriptionIndex],
-            churchLineList[dueDateIndex],
-            churchLineList[priorityIndex])
+    try {
+        // Get string of tasks.
+        val churchTaskLines = taskLines[2]
 
-        nameIndex += 4
-        descriptionIndex += 4
-        dueDateIndex += 4
-        priorityIndex += 4
+        // Split the list at vertical bars to split into correct parts.
+        val churchLineList = churchTaskLines.split("|")
 
-        churchTasks.add(churchTask)
+        // Divide the total parts by the amount in the task.
+        val taskAmount = churchLineList.size / 4
+
+        // Declare the indexes/order for each part of the task.
+        var nameIndex = 0
+        var descriptionIndex = 1
+        var dueDateIndex = 2
+        var priorityIndex = 3
+
+        // Create a new task object and assign it's correlating parts.
+        for (i in 0..< taskAmount) {
+            val churchTask = ChurchTask(
+                churchLineList[nameIndex],
+                churchLineList[descriptionIndex],
+                churchLineList[dueDateIndex],
+                churchLineList[priorityIndex])
+
+            // Increase each index by the amount of parts there are in object.
+            // This is for the next loop.
+            nameIndex += 4
+            descriptionIndex += 4
+            dueDateIndex += 4
+            priorityIndex += 4
+
+            // Add the task the list of task objects.
+            churchTasks.add(churchTask)
+        }
+
+    } catch (e: Exception) {
+        return churchTasks
     }
+
+    // Return the list of task objects.
     return churchTasks
 }
 fun workStringToObject(taskLines: List<String>): MutableList<Task> {
-    val workTaskLines = taskLines[0]
-    val workTasks: MutableList<Task> = mutableListOf()
-    val taskLineList = workTaskLines.split("|")
-    val taskAmount = taskLineList.size / 5
-    var nameIndex = 0
-    var descriptionIndex = 1
-    var dueDateIndex = 2
-    var priorityIndex = 3
-    var peopleInvolvedIndex = 4
-    val peopleString = taskLineList[peopleInvolvedIndex]
-    val firstList: List<String> = peopleString.substring(1, peopleString.length - 1).split(",")
-    val peopleList: MutableList<String> = mutableListOf()
-    for (item in firstList) {
-        peopleList.add(item)
-    }
-    for (i in 0..< taskAmount) {
-        val workTask = WorkTask(
-            taskLineList[nameIndex],
-            taskLineList[descriptionIndex],
-            taskLineList[dueDateIndex],
-            taskLineList[priorityIndex],
-            peopleList
-        )
-        nameIndex += 5
-        descriptionIndex += 5
-        dueDateIndex += 5
-        priorityIndex += 5
-        peopleInvolvedIndex += 5
+    // Deserialize the work task strings into objects.
 
-        workTasks.add(workTask)
+    val workTasks: MutableList<Task> = mutableListOf()
+    try {
+        // Get string of tasks.
+        val workTaskLines = taskLines[0]
+
+        // Split the list at vertical bars to split into correct parts.
+        val taskLineList = workTaskLines.split("|")
+
+        // Divide the total parts by the amount in the task.
+        val taskAmount = taskLineList.size / 5
+
+        // Declare the indexes/order for each part of the task.
+        var nameIndex = 0
+        var descriptionIndex = 1
+        var dueDateIndex = 2
+        var priorityIndex = 3
+        var peopleInvolvedIndex = 4
+
+        // Save the string of people involved.
+        val peopleString = taskLineList[peopleInvolvedIndex]
+
+        // Rewrite the string of people involved so that it is a list data type.
+        val firstList: List<String> = peopleString.substring(1, peopleString.length - 1).split(",")
+
+        // Add each of those people to a mutable list.
+        val peopleList: MutableList<String> = mutableListOf()
+        for (item in firstList) {
+            peopleList.add(item)
+        }
+
+        // Create a new task object and assign it's correlating parts.
+        for (i in 0..< taskAmount) {
+            val workTask = WorkTask(
+                taskLineList[nameIndex],
+                taskLineList[descriptionIndex],
+                taskLineList[dueDateIndex],
+                taskLineList[priorityIndex],
+                peopleList
+            )
+
+            // Increase each index by the amount of parts there are in object.
+            // This is for the next loop.
+            nameIndex += 5
+            descriptionIndex += 5
+            dueDateIndex += 5
+            priorityIndex += 5
+            peopleInvolvedIndex += 5
+
+            // Add the task the list of task objects.
+            workTasks.add(workTask)
+        }
+    } catch (e: Exception) {
+        return workTasks
     }
+
+    // Return the list of task objects.
     return workTasks
 }
 

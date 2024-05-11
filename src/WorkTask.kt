@@ -1,10 +1,13 @@
 class WorkTask(
+    // Attributes for object.
     name: String = "",
     description: String = "",
     dueDate: String = "",
     private var priority: String = "",
     private var peopleInvolved: MutableList<String> = mutableListOf()
 ): Task(name, description, dueDate) {
+
+    // Override the setValues function to include priority and people involved.
     override fun setValues() {
         super.setValues()
         print("What is the priority? (Out of ten): ")
@@ -12,6 +15,8 @@ class WorkTask(
         var person = ""
         println("Who is involved? (type 'q' to quit) ")
         var count = 1
+
+        // Add people involved to a list of people.
         while (person != "q") {
             print("$count. ")
             person = readln()
@@ -22,6 +27,7 @@ class WorkTask(
         }
     }
 
+    // Override display task function to show priority and people involved.
     override fun displayTask() {
         super.displayTask()
         println("Priority: $priority")
@@ -31,11 +37,9 @@ class WorkTask(
         }
     }
 
+
+    // Override the task to string function to match the attributes of Work class.
     override fun taskToString(): String {
-//        val peopleString = ""
-//        for (people in peopleInvolved) {
-//            peopleString += "people"
-//        }
         return "$name|$description|$dueDate|$priority|$peopleInvolved|"
 
     }

@@ -1,5 +1,6 @@
 
 open class Task(
+    // Attributes for object.
     var name: String = "",
     protected var description: String = "",
     protected var dueDate: String = ""

@@ -1,4 +1,5 @@
 class ChurchTask(
+    // Attributes for object.
     name: String = "",
     description: String = "",
     dueDate: String = "",
